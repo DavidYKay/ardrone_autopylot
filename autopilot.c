@@ -26,7 +26,8 @@ autopilot.c - ardrone_tool custom code for AR.Drone autopilot agent.
 #include <stdio.h>
 
 //ARDroneLib
-#include <ardrone_tool/ardrone_time.h>
+//#include <ardrone_tool/ardrone_time.h>
+#include <utils/ardrone_time.h>
 #include <ardrone_tool/Navdata/ardrone_navdata_client.h>
 #include <ardrone_tool/Control/ardrone_control.h>
 #include <ardrone_tool/UI/ardrone_input.h>
@@ -54,9 +55,13 @@ PROTO_THREAD_ROUTINE(video_stage, data);
 extern input_device_t gamepad;
 
 /* Implementing Custom methods for the main function of an ARDrone application */
+int main(int argc, char** argv)
+{
+	return ardrone_tool_main(argc, argv);
+}
 
 /* The delegate object calls this method during initialization of an ARDrone application */
-C_RESULT ardrone_tool_init_custom(int argc, char **argv) {
+C_RESULT ardrone_tool_init_custom(void) {
 
 	/* Registering for a new device of game controller */
 	ardrone_tool_input_add( &gamepad );
@@ -102,4 +107,3 @@ C_RESULT signal_exit() {
 	THREAD_TABLE_ENTRY( navdata_update, 20 )
 	THREAD_TABLE_ENTRY( video_stage, 20 )
 	END_THREAD_TABLE
-

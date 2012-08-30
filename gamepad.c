@@ -92,7 +92,7 @@ typedef enum {
 
 #include <VP_Os/vp_os_types.h>
 #include <ardrone_tool/UI/ardrone_input.h>
-#include <ardrone_tool/UI/ardrone_tool_ui.h>
+//#include <ardrone_tool/UI/ardrone_tool_ui.h>
 
 #include "autopilot.h"
 #include "agent.h"

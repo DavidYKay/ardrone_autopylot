@@ -24,10 +24,13 @@
 # Customizable parameters section -------------------------------------------------------------------------------------------------
 
 # SDK version
-SDKVER = ARDrone_SDK_Version_1_8_20110726/
+#SDKVER = ARDrone_SDK_Version_1_8_20110726/
+#SDKVER = ARDrone_SDK_2_0/
+SDKVER = ARDrone_SDK_2_0
 
 # This should be where you put the version above
-TOP = $(HOME)/$(SDKVER)
+#TOP = $(HOME)/$(SDKVER)
+TOP = $(HOME)/Tools/ardrone/sdk/$(SDKVER)
 
 # This should be where you put ArDroneLib, which you should compile first.  For versions 1.6 and 1.7, make sure to set 
 DIR = $(TOP)/ARDroneLib
@@ -57,6 +60,9 @@ GAMEPAD_ID = 0x046dc215
 
 # Set up any extra libraries you need
 #EXTRA_LIB = -lhighgui -lcv -lcxcore
+#EXTRA_LIB = -L/usr/lib/ -lhighgui -lcv -lcxcore
+#EXTRA_LIB = $(pkg-config --cflags --libs opencv) -lhighgui -lcxcore
+EXTRA_LIB = $(pkg-config --cflags --libs opencv) -lpthread
 
 # --------------------------------------------------------------------------------------------------------------------------------
 #
@@ -70,7 +76,8 @@ GCC_VERSION=$(shell $(GENERIC_COMMAND_PREFIX)gcc -v 2>&1 | \
 OS_TARGET_ID = $(shell uname -sor | sed -e "s/[ \/]/_/g")
 
 # ARDroneLib build path
-SYS = $(OS_TARGET_ID)_gcc_$(GCC_VERSION)
+#SYS = $(OS_TARGET_ID)_gcc_$(GCC_VERSION)
+SYS = Linux_3.2.0-29-generic_GNU_Linux_usrbingcc_4.6.3
 
 # Useful ARDroneLib subdirectories
 SDK = $(DIR)/VP_SDK
