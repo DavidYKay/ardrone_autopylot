@@ -88,21 +88,32 @@ TGT = $(SFT)/Build/targets_versions
 INC = -I$(DIR) -I$(SDK) -I$(SDK)/VP_Os/linux -I$(SFT)/Lib -I$(SFT)/Common
 
 # Strict compilation
-CC = gcc -Wall
+#CC = gcc -Wall
+
+# Debug compilation
+#CC = gcc -Wall --enable-checking -g -O0 -v -da -Q
+CC = gcc -Wall -g -O0 -v -da -Q
 
 # Project name
 ALL = autopilot
 
 # Objects to build and link
-OBJS = autopilot.o gamepad.o navdata.o video_stage.o agent.o $(LANGUAGE_AGENT).o 
+OBJS = autopilot.o gamepad.o navdata.o video_stage.o agent.o $(LANGUAGE_AGENT).o
 
 all: $(ALL)
 
+#$(ALL): $(OBJS)
+#	$(CC) -o $(ALL) $(OBJS) -lpthread -lm \
+#           -L$(TGT)/ardrone_lib_PROD_MODE_vlib_$(SYS) -lpc_ardrone  \
+#           -L$(TGT)/sdk_PROD_MODE_vlib_$(SYS) -lsdk \
+#           -L$(TGT)/vlib_PROD_MODE_$(SYS) -lvlib -lSDL \
+#	   $(LANGUAGE_LIB) \
+#	   $(EXTRA_LIB)
 $(ALL): $(OBJS)
 	$(CC) -o $(ALL) $(OBJS) -lpthread -lm \
-           -L$(TGT)/ardrone_lib_PROD_MODE_vlib_$(SYS) -lpc_ardrone  \
-           -L$(TGT)/sdk_PROD_MODE_vlib_$(SYS) -lsdk \
-           -L$(TGT)/vlib_PROD_MODE_$(SYS) -lvlib -lSDL \
+           -L$(TGT)/ardrone_lib_DEBUG_MODE_vlib_$(SYS) -lpc_ardrone  \
+           -L$(TGT)/sdk_DEBUG_MODE_vlib_$(SYS) -lsdk \
+           -L$(TGT)/vlib_DEBUG_MODE_$(SYS) -lvlib -lSDL \
 	   $(LANGUAGE_LIB) \
 	   $(EXTRA_LIB)
            
