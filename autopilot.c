@@ -102,8 +102,8 @@ C_RESULT signal_exit() {
 }
 
 /* Implementing thread table in which you add routines of your application and those provided by the SDK */
-	BEGIN_THREAD_TABLE
-	THREAD_TABLE_ENTRY( ardrone_control, 20 )
-	THREAD_TABLE_ENTRY( navdata_update, 20 )
-	THREAD_TABLE_ENTRY( video_stage, 20 )
-	END_THREAD_TABLE
+BEGIN_THREAD_TABLE
+    THREAD_TABLE_ENTRY( ardrone_control, 20 )
+    THREAD_TABLE_ENTRY( navdata_update, 20 )
+    THREAD_TABLE_ENTRY( video_stage, 20 )
+END_THREAD_TABLE

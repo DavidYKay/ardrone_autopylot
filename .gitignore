@@ -1,3 +1,4 @@
 *.o
 autopilot
 *.log
+*.pyc
