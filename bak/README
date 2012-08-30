@@ -1,0 +1,76 @@
+This directory contains source code for building a stubbed version of the AR.Drone AutoPylot program, which allows you to 
+auto-pilot the Parrot AR.Drone from source code written in Python, Matlab, or C, on a computer running 64-bit Ubuntu.
+
+To get started, you should download the current AR.Drone SDK (registration required). Then gunzip and un-tar the downloaded 
+file, change to the ARDroneLib/Soft/Build directory. Edit custom.makefile so that USE_LINUX = yes and 
+FFMPEG_RECORDING_SUPPORT = no.  Then type make to build the SDK.  Also make sure your AR.Drone has the current firmware -- 
+easiest way is to download the current version of FreeFlight from the AppStore.
+
+If you have a Logitech Extreme 30 Pro joystick or Playstation PS3 controller, the only file you should need to modify for 
+the autopilot immediately is the Makefile, whose first non-commented line you should change to reflect where you put the 
+AR.Drone SDK (if you put it in your home directory, you don't even have to do that.) You should also modify the lines right 
+below there that specify which kind of controller you have, and its hexadecimal ID (which you can find by issuing the 
+lsusb command in Linux). If you have some other kind of gamepad, like a Nintendo Wii, you'll have to modify gamepad.c to 
+reflect this.  
+
+I set up the program so that the Logitech joystick axes work as follows:
+
+Axis 	Stick 	Effect
+0 	Rock left/right 	        Roll (sideways travel)
+1 	Rock forward/back 	        Pitch (forward/backward travel)
+2 	Twist clockwise/anticlockwise 	Yaw (clockwise/anticlockwise turn)
+5 	Mini-joystick on top 	        Altitude (forward=down; backward=up)
+
+
+The Logitech buttons are labeled 1 - 12 on the joystick. I set up the program to work with them as follows:
+
+Button 	Effect
+1 (trigger) 	Takeoff/Land
+2 	        Exit program (IN-FLIGHT EMERGENCY CUTOFF) 
+3 	        Zap (toggle front/belly camera) 
+4 	        Toggle autopilot 
+
+Note that the Exit button will also shut down the drone, so you should only hit this button once the drone has landed!
+
+I set up the program so that the PS3 axes work as follows:
+
+Axis 	Stick 	Effect
+0 	Left-side stick left/right 	Roll (sideways travel)
+1 	Left-side stick forward/back 	Pitch (forward/backward travel)
+2 	Right-side stick left/right 	Yaw (clockwise/anticlockwise turn)
+3 	Right-side stick forward/back 	Altitude (forward=down; backward=up)
+
+
+I set up the program to work with the PS3 buttons as follows:
+
+Button 	Effect
+8 (select) 	Exit program (IN-FLIGHT EMERGENCY CUTOFF) 
+9 (start) 	Takeoff/Land
+0 (square) 	Zap (toggle front/belly camera)
+1 (×) 	        Toggle autopilot
+
+
+These button and axis configurations can be modified by editing gamepad.c
+
+Once you've made the program you can run it by typing ./autopilot in the directory where you built it. The Makefile is 
+configured to use Python, but you can modify it for Matlab or C. For Python, you should first make sure that your 
+PYTHONPATH shell variable is set to include the current directory: either on the command line, or (better long-term 
+solution) in your .bashrc file, put the following instruction:
+
+
+export PYTHONPATH=$PYTHONPATH:.
+
+For Matlab, you should have something simiar in your .bashrc file; for example:
+
+
+export MATLAB=/usr/local/matlabR2010a
+
+The autopilot is intially off, so you are flying the AR.Drone manually. When you push the autopilot button (4 on the Logitech
+joystick, × on the PS3), control is transferred to the action function in agent.py. Any subsequent joystick / gamepad action 
+returns control to you, providing an emergency override. The function in agent.py currently ignores the video and navigation 
+data input and just makes the drone turn clockwise. You can modify this function to do something more interesting. If you 
+prefer to program in C, you can edit the LANGUAGE variable in the Makefile to c_agent instead of python_agent, and work with 
+the code in c_agent.c. I may also implement the agent in Matlab or Java, depending on peoples' interests.
+
+Copyright and licensing information can be found in the header of each source file. Please contact me with any questions or 
+suggestions. 
