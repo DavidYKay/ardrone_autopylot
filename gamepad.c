@@ -35,6 +35,8 @@ History:
   03-AUG-2011 Simon D. Levy: Fixed missing return value in update_gamepad.
 */
 
+#define GAMEPAD_PS3_BLUETOOTH
+
 // Gamepad type is defined in Makefile.
 
 //#ifdef GAMEPAD_PS3_ID
@@ -120,6 +122,7 @@ typedef enum {
   AXIS_GAZ   = PS3_AXIS_RIGHT_VERTICAL,     // Altitude
   AXIS_IGNORE3,
   AXIS_IGNORE4,
+  AXIS_IGNORE5 = PS3_AXIS_CONTROLLER,
 #endif
 } PAD_AXIS;
 
@@ -289,23 +292,33 @@ C_RESULT update_gamepad(void) {
 		}
 		else if (type & JS_EVENT_AXIS ) {
 
-			if (number != AXIS_IGNORE3 && number != AXIS_IGNORE4) {
+			if (number != AXIS_IGNORE3 && number != AXIS_IGNORE4 && number != AXIS_IGNORE5) {
 				refresh_values = TRUE;
 				enable = TRUE;
 				float angle = value / (float)SHRT_MAX;
-                                printf("Axis was adjusted: %d, %f \n", number, angle);
+                                //printf("Axis was adjusted: %d, %f \n", number, angle);
 				switch (number) {
 					case AXIS_PHI:
-                                                printf("Phi was adjusted to: %f \n", phi);
+                                                printf("Roll/Phi was adjusted to: %f \n", phi);
 						phi = angle;
 						break;
 					case AXIS_THETA:
-                                                printf("Theta was adjusted to: %f \n", theta);
-						theta = angle;
+                                                printf("Pitch/Theta was adjusted to: %f \n", theta);
+                                                #ifdef GAMEPAD_PS3_BLUETOOTH
+                                                // Flip for BT PS3
+                                                theta = -1 * angle;
+                                                #else
+                                                theta = angle;
+                                                #endif
 						break;
 					case AXIS_GAZ:
-                                                printf("Gaz was adjusted to: %f \n", gaz);
-						gaz = angle;
+                                                printf("Altitude/Gaz was adjusted to: %f \n", gaz);
+                                                #ifdef GAMEPAD_PS3_BLUETOOTH
+                                                // Flip for BT PS3
+                                                gaz = -1 * angle;
+                                                #else
+                                                gaz = angle;
+                                                #endif
 						break;
 					case AXIS_YAW:
                                                 printf("Yaw was adjusted to: %f \n", yaw);
