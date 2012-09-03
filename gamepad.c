@@ -37,9 +37,51 @@ History:
 
 // Gamepad type is defined in Makefile.
 
-#ifdef GAMEPAD_PS3_ID
+//#ifdef GAMEPAD_PS3_ID
+#if 1
 
 #define GAMEPAD_ID GAMEPAD_PS3_ID
+
+
+#if 0
+typedef enum {
+  PS3_BUTTON_TRIANGLE = 12,
+  PS3_BUTTON_SQUARE   = 19,
+  PS3_BUTTON_CIRCLE   = 13,
+  PS3_BUTTON_X        = 14,
+  
+  PS3_BUTTON_L1       = 10,
+  PS3_BUTTON_L2       = 8,
+  PS3_BUTTON_L3       = 1,
+
+  PS3_BUTTON_R1       = 11,
+  PS3_BUTTON_R2       = 9,
+  PS3_BUTTON_R3       = 2,
+
+  PS3_BUTTON_SELECT   = 8,
+  PS3_BUTTON_START    = 9,
+} PS3_BLUETOOTH_BUTTONS;
+#else
+
+typedef enum {
+  PS3_BUTTON_TRIANGLE = 12,
+  PS3_BUTTON_SQUARE   = 19,
+  PS3_BUTTON_CIRCLE   = 13,
+  PS3_BUTTON_X        = 14,
+  
+  PS3_BUTTON_L1       = 10,
+  PS3_BUTTON_L2       = 8,
+  PS3_BUTTON_L3       = 1,
+
+  PS3_BUTTON_R1       = 11,
+  PS3_BUTTON_R2       = 9,
+  PS3_BUTTON_R3       = 2,
+
+  PS3_BUTTON_SELECT   = 0,
+  PS3_BUTTON_START    = 3,
+} PS3_BLUETOOTH_BUTTONS;
+
+#endif
 
 typedef enum {
   AXIS_PHI = 0,
@@ -51,10 +93,17 @@ typedef enum {
 } PAD_AXIS;
 
 typedef enum {
-  BUTTON_SELECT = 8,
-  BUTTON_START = 9,
-  BUTTON_ZAP = 0,
-  BUTTON_AUTO = 1
+#if 0
+  BUTTON_EMERGENCY = 8,
+  BUTTON_TAKEOFF  = 9,
+  BUTTON_ZAP    = 0,
+  BUTTON_AUTO   = 1
+#else
+  BUTTON_EMERGENCY = PS3_BUTTON_SELECT,
+  BUTTON_TAKEOFF  = PS3_BUTTON_START,
+  BUTTON_ZAP    = PS3_BUTTON_R1,
+  BUTTON_AUTO   = PS3_BUTTON_TRIANGLE,
+#endif
 } PAD_BUTTONS;
 
 #else // default to Logitech gamepad
@@ -71,8 +120,8 @@ typedef enum {
 } PAD_AXIS;
 
 typedef enum {
-  BUTTON_START = 0,
-  BUTTON_SELECT,
+  BUTTON_TAKEOFF = 0,
+  BUTTON_EMERGENCY,
   BUTTON_ZAP,
   BUTTON_AUTO
 } PAD_BUTTONS;
@@ -165,6 +214,7 @@ C_RESULT update_gamepad(void) {
 		unsigned char type = js_e_buffer[idx].type;
 		unsigned char number = js_e_buffer[idx].number;
 		short value = js_e_buffer[idx].value;
+                
 
 		if (type & JS_EVENT_INIT ) {
 
@@ -175,26 +225,32 @@ C_RESULT update_gamepad(void) {
 			break;
 		}
 		else if (type & JS_EVENT_BUTTON ) {
+                    printf("Button was pressed: %d \n", number);
 
 			switch(number ) {
 
-				case BUTTON_START :
+				case BUTTON_TAKEOFF :
+                                        printf("Takeoff/land \n");
 					start ^= 1;
 					ardrone_tool_set_ui_pad_start( start );
 					g_autopilot = FALSE;
 					break;
-				case BUTTON_SELECT :
+				case BUTTON_EMERGENCY :
+                                        printf("EMERGENCY button \n");
 					ardrone_tool_set_ui_pad_select(js_e_buffer[idx].value);
 					g_exit = TRUE;
 					return C_OK;
 				case BUTTON_ZAP:
+                                        printf("ZAP!\n");
 					agent_zap();
 					break;
 				case BUTTON_AUTO:
 					if (g_autopilot) {
+                                                printf("Disable autopilot!\n");
 						refresh_values = TRUE;
 					}
 					else {
+                                                printf("Enable autopilot!\n");
 						g_autopilot = TRUE;
 					}
 					break;
@@ -207,17 +263,22 @@ C_RESULT update_gamepad(void) {
 				refresh_values = TRUE;
 				enable = TRUE;
 				float angle = value / (float)SHRT_MAX;
+                                printf("Axis was adjusted: %d, %f \n", number, angle);
 				switch (number) {
 					case AXIS_PHI:
+                                                printf("Phi was adjusted to: %f \n", phi);
 						phi = angle;
 						break;
 					case AXIS_THETA:
+                                                printf("Theta was adjusted to: %f \n", theta);
 						theta = angle;
 						break;
 					case AXIS_GAZ:
+                                                printf("Gaz was adjusted to: %f \n", gaz);
 						gaz = angle;
 						break;
 					case AXIS_YAW:
+                                                printf("Yaw was adjusted to: %f \n", yaw);
 						yaw = angle;
 						break;
 				}

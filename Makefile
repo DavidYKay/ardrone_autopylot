@@ -52,11 +52,17 @@ LANGUAGE_LIB = -L/usr/lib/python$(PYVER)/config -lpython$(PYVER)
 
 # You can get your gamepad id by issuing the Linux lsusb command
 
-GAMEPAD = GAMEPAD_LOGITECH
-GAMEPAD_ID = 0x046dc215
+#GAMEPAD = GAMEPAD_LOGITECH
+#GAMEPAD_ID = 0x046dc215
 
-#GAMEPAD = GAMEPAD_PS3
-#GAMEPAD_ID = 0x0e8f310d
+GAMEPAD_PS3_ID = GAMEPAD_PS3
+
+GAMEPAD = GAMEPAD_PS3
+#GAMEPAD_ID = 0x0e8f310d # original
+#GAMEPAD_ID  = 0x34C7314C2B91 # bluetooth raw
+#GAMEPAD_ID   = 0xC485080EF3DE # bluetooth - hcitool dev
+GAMEPAD_ID  = 0x054c0268 # USB
+
 
 # Set up any extra libraries you need
 #EXTRA_LIB = -lhighgui -lcv -lcxcore
