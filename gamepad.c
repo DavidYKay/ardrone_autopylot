@@ -64,6 +64,24 @@ typedef enum {
 #else
 
 typedef enum {
+  PS3_AXIS_TRIANGLE = 12,
+  PS3_AXIS_SQUARE   = 19,
+  PS3_AXIS_CIRCLE   = 13,
+  PS3_AXIS_X        = 14,
+  
+  PS3_AXIS_L1       = 10,
+  PS3_AXIS_L2       = 8,
+  PS3_AXIS_L3       = 1,
+
+  PS3_AXIS_R1       = 11,
+  PS3_AXIS_R2       = 9,
+  PS3_AXIS_R3       = 2,
+
+  PS3_AXIS_SELECT   = 0,
+  PS3_AXIS_START    = 3,
+} PS3_BLUETOOTH_AXES;
+
+typedef enum {
   PS3_BUTTON_TRIANGLE = 12,
   PS3_BUTTON_SQUARE   = 19,
   PS3_BUTTON_CIRCLE   = 13,
@@ -84,12 +102,21 @@ typedef enum {
 #endif
 
 typedef enum {
-  AXIS_PHI = 0,
-  AXIS_THETA,
-  AXIS_YAW,
-  AXIS_GAZ,
+#if 0
+  AXIS_PHI = 0, // Roll
+  AXIS_THETA,   // Pitch
+  AXIS_YAW,     // Yaw
+  AXIS_GAZ,     // Altitude
   AXIS_IGNORE3,
   AXIS_IGNORE4,
+#else
+  AXIS_PHI = 0, // Roll
+  AXIS_THETA,   // Pitch
+  AXIS_YAW,     // Yaw
+  AXIS_GAZ,     // Altitude
+  AXIS_IGNORE3,
+  AXIS_IGNORE4,
+#endif
 } PAD_AXIS;
 
 typedef enum {
@@ -227,8 +254,7 @@ C_RESULT update_gamepad(void) {
 		else if (type & JS_EVENT_BUTTON ) {
                     printf("Button was pressed: %d \n", number);
 
-			switch(number ) {
-
+			switch(number) {
 				case BUTTON_TAKEOFF :
                                         printf("Takeoff/land \n");
 					start ^= 1;
