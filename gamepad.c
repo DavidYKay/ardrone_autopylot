@@ -2,8 +2,8 @@
 gamepad.c - ardrone_tool custom code for AR.Drone autopilot agent.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
-    published by the Free Software Foundation, either version 3 of the 
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -11,25 +11,25 @@ gamepad.c - ardrone_tool custom code for AR.Drone autopilot agent.
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
- You should have received a copy of the GNU Lesser General Public License 
+ You should have received a copy of the GNU Lesser General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- You should also have received a copy of the Parrot Parrot AR.Drone 
- Development License and Parrot AR.Drone copyright notice and disclaimer 
- and If not, see 
-   <https://projects.ardrone.org/attachments/277/ParrotLicense.txt> 
+ You should also have received a copy of the Parrot Parrot AR.Drone
+ Development License and Parrot AR.Drone copyright notice and disclaimer
+ and If not, see
+   <https://projects.ardrone.org/attachments/277/ParrotLicense.txt>
  and
    <https://projects.ardrone.org/attachments/278/ParrotCopyrightAndDisclaimer.txt>.
 
 History:
 
   04-JUN-2007: version 1.0 Created by Sylvain Gaeremynck <sylvain.gaeremynck@parrot.fr>.
- 
+
   24-OCT-2010 Simon D. Levy: Removed non-gamepad (non-Logitech) code.
                              Incorporated gamepad.h.
-   
-  26-OCT-2010 Simon D. Levy: Replaced deprecated ardrone_tool_set_ui_pad_* navigation calls 
+
+  26-OCT-2010 Simon D. Levy: Replaced deprecated ardrone_tool_set_ui_pad_* navigation calls
                              with ardrone_at_set_progress_cmd.
- 
+
   24-NOV-2010 Simon D. Levy: Added auto-pilot toggling.
 
   03-AUG-2011 Simon D. Levy: Fixed missing return value in update_gamepad.
@@ -49,7 +49,7 @@ typedef enum {
   PS3_BUTTON_SQUARE   = 19,
   PS3_BUTTON_CIRCLE   = 13,
   PS3_BUTTON_X        = 14,
-  
+
   PS3_BUTTON_L1       = 10,
   PS3_BUTTON_L2       = 8,
   PS3_BUTTON_L3       = 1,
@@ -64,21 +64,25 @@ typedef enum {
 #else
 
 typedef enum {
-  PS3_AXIS_TRIANGLE = 12,
-  PS3_AXIS_SQUARE   = 19,
-  PS3_AXIS_CIRCLE   = 13,
-  PS3_AXIS_X        = 14,
-  
-  PS3_AXIS_L1       = 10,
-  PS3_AXIS_L2       = 8,
-  PS3_AXIS_L3       = 1,
+  PS3_AXIS_TRIANGLE         = 16,
+  PS3_AXIS_SQUARE           = 15,
+  PS3_AXIS_CIRCLE           = 17,
+  PS3_AXIS_X                = 18,
 
-  PS3_AXIS_R1       = 11,
-  PS3_AXIS_R2       = 9,
-  PS3_AXIS_R3       = 2,
+  PS3_AXIS_L1               = 14,
+  PS3_AXIS_L2               = 12,
 
-  PS3_AXIS_SELECT   = 0,
-  PS3_AXIS_START    = 3,
+  PS3_AXIS_R1               = 15,
+  PS3_AXIS_R2               = 13,
+
+  PS3_AXIS_LEFT_HORIZONTAL  = 0,
+  PS3_AXIS_LEFT_VERTICAL    = 1,
+
+  PS3_AXIS_RIGHT_HORIZONTAL = 2,
+  PS3_AXIS_RIGHT_VERTICAL   = 3,
+
+  PS3_AXIS_CONTROLLER       = 6,
+
 } PS3_BLUETOOTH_AXES;
 
 typedef enum {
@@ -86,7 +90,7 @@ typedef enum {
   PS3_BUTTON_SQUARE   = 19,
   PS3_BUTTON_CIRCLE   = 13,
   PS3_BUTTON_X        = 14,
-  
+
   PS3_BUTTON_L1       = 10,
   PS3_BUTTON_L2       = 8,
   PS3_BUTTON_L3       = 1,
@@ -110,10 +114,10 @@ typedef enum {
   AXIS_IGNORE3,
   AXIS_IGNORE4,
 #else
-  AXIS_PHI = 0, // Roll
-  AXIS_THETA,   // Pitch
-  AXIS_YAW,     // Yaw
-  AXIS_GAZ,     // Altitude
+  AXIS_PHI   = PS3_AXIS_LEFT_HORIZONTAL, // Roll
+  AXIS_THETA = PS3_AXIS_LEFT_VERTICAL,   // Pitch
+  AXIS_YAW   = PS3_AXIS_RIGHT_HORIZONTAL,     // Yaw
+  AXIS_GAZ   = PS3_AXIS_RIGHT_VERTICAL,     // Altitude
   AXIS_IGNORE3,
   AXIS_IGNORE4,
 #endif
@@ -127,9 +131,9 @@ typedef enum {
   BUTTON_AUTO   = 1
 #else
   BUTTON_EMERGENCY = PS3_BUTTON_SELECT,
-  BUTTON_TAKEOFF  = PS3_BUTTON_START,
-  BUTTON_ZAP    = PS3_BUTTON_R1,
-  BUTTON_AUTO   = PS3_BUTTON_TRIANGLE,
+  BUTTON_TAKEOFF   = PS3_BUTTON_START,
+  BUTTON_ZAP       = PS3_BUTTON_R1,
+  BUTTON_AUTO      = PS3_BUTTON_TRIANGLE,
 #endif
 } PAD_BUTTONS;
 
@@ -241,7 +245,7 @@ C_RESULT update_gamepad(void) {
 		unsigned char type = js_e_buffer[idx].type;
 		unsigned char number = js_e_buffer[idx].number;
 		short value = js_e_buffer[idx].value;
-                
+
 
 		if (type & JS_EVENT_INIT ) {
 
