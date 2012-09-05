@@ -26,8 +26,8 @@ agent.py - Python agent stub for AR.Drone autopilot program.
 from agent import *
 
 # For OpenCV
-#import cv
-#WINDOW_NAME = "AR.Drone"
+import cv
+WINDOW_NAME = "AR.Drone"
 
 def action(img_bytes, img_width, img_height, is_belly, ctrl_state, vbat_flying_percentage, theta, phi, psi, altitude, vx, vy, vz):
 
@@ -36,11 +36,11 @@ def action(img_bytes, img_width, img_height, is_belly, ctrl_state, vbat_flying_p
 	      (ctrl_state, vbat_flying_percentage, theta, phi, psi, altitude, int(vx), int(vy), int(vz))
 
 	# Show camera image using OpenCV
-	#img = cv.CreateImageHeader((img_width,img_height), cv.IPL_DEPTH_8U, 3)
-	#cv.SetData(img, img_bytes, 3*img_width)
-	#cv.NamedWindow(WINDOW_NAME)
-	#cv.ShowImage(WINDOW_NAME, img)
-	#cv.WaitKey(5)
+	img = cv.CreateImageHeader((img_width,img_height), cv.IPL_DEPTH_8U, 3)
+	cv.SetData(img, img_bytes, 3*img_width)
+	cv.NamedWindow(WINDOW_NAME)
+	cv.ShowImage(WINDOW_NAME, img)
+	cv.WaitKey(5)
 
 	# Set up commands for a clockwise turn
 	start = 0; 
