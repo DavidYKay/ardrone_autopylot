@@ -2,8 +2,8 @@
 video_stage.c - video thread for AR.Drone autopilot agent.
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
-    published by the Free Software Foundation, either version 3 of the 
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -11,19 +11,19 @@ video_stage.c - video thread for AR.Drone autopilot agent.
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
- You should have received a copy of the GNU Lesser General Public License 
+ You should have received a copy of the GNU Lesser General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- You should also have received a copy of the Parrot Parrot AR.Drone 
- Development License and Parrot AR.Drone copyright notice and disclaimer 
- and If not, see 
-   <https://projects.ardrone.org/attachments/277/ParrotLicense.txt> 
+ You should also have received a copy of the Parrot Parrot AR.Drone
+ Development License and Parrot AR.Drone copyright notice and disclaimer
+ and If not, see
+   <https://projects.ardrone.org/attachments/277/ParrotLicense.txt>
  and
    <https://projects.ardrone.org/attachments/278/ParrotCopyrightAndDisclaimer.txt>.
 
 History:
 
   27-JUL-2007: version 1.0 Created by marc-olivier.dzeukou@parrot.com
- 
+
   20-NOV-2010 Simon D. Levy: modified to send video and navigation data to autopilot agent
 */
 
@@ -80,12 +80,15 @@ typedef  struct _vp_stages_gtk_config_ {
 
 C_RESULT output_gtk_stage_open( void *cfg, vp_api_io_data_t *in, vp_api_io_data_t *out) {
 
+        printf("video_stage:open()()\n");
 	agent_init();
 
 	return (SUCCESS);
 }
 
 C_RESULT output_gtk_stage_transform( vp_stages_gtk_config_t *cfg, vp_api_io_data_t *in, vp_api_io_data_t *out) {
+
+        printf("video_stage:transform()\n");
 
 	uint8_t * camera_data = (uint8_t*)in->buffers[0];
 
@@ -99,6 +102,7 @@ C_RESULT output_gtk_stage_transform( vp_stages_gtk_config_t *cfg, vp_api_io_data
 }
 
 C_RESULT output_gtk_stage_close( void *cfg, vp_api_io_data_t *in, vp_api_io_data_t *out) {
+        printf("video_stage:close()()\n");
 
 	agent_close();
 
@@ -216,6 +220,7 @@ DEFINE_THREAD_ROUTINE(video_stage, data) {
 			{
 				if( SUCCEED(vp_api_run(&pipeline, &out)) ) {
 					if( (out.status == VP_API_STATUS_PROCESSING || out.status == VP_API_STATUS_STILL_RUNNING) ) {
+                                            PRINT("Video stage success\n");
 						loop = SUCCESS;
 					}
 				}
@@ -230,4 +235,3 @@ DEFINE_THREAD_ROUTINE(video_stage, data) {
 
         exit(0);
 }
-

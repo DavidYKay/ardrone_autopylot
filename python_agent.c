@@ -70,6 +70,7 @@ void agent_comm_init() {
 	}
 
 	pFunc = PyObject_GetAttrString(pModule, AGENT_FUNCTION_NAME);
+        printf("got python pFunc: %d\n", pFunc);
 
 	if (!(pFunc && PyCallable_Check(pFunc))) {
 		if (PyErr_Occurred()) {
@@ -114,6 +115,7 @@ static float get_float_result(PyObject *pResult, int pos) {
 
 void agent_comm_act(unsigned char * img_bytes, int img_width, int img_height, bool_t img_is_belly,
 		    navdata_demo_t * navdata, commands_t * commands) {
+        printf("python_agent:agent_comm_act()\n");
 
         PyObject *pImageBytes = PyByteArray_FromStringAndSize((const char *)img_bytes, img_width*img_height*3);
 
