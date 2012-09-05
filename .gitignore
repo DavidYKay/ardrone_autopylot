@@ -2,3 +2,4 @@
 autopilot
 *.log
 *.pyc
+bak/
