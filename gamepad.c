@@ -230,7 +230,7 @@ C_RESULT update_gamepad(void) {
 	if (refresh_values) {
 
 		g_autopilot = FALSE;
-		ardrone_at_set_progress_cmd(enable, phi, theta, gaz, yaw);
+		ardrone_tool_set_progressive_cmd(enable, phi, theta, gaz, yaw, 0.0, 0.0);
 	}
 
 	return C_OK;

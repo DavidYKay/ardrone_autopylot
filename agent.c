@@ -89,7 +89,7 @@ void agent_update(uint8_t * camera_data) {
 	if (g_autopilot) {
 
 		if (commands.enable) {
-			ardrone_at_set_progress_cmd(1, commands.phi, commands.theta, commands.gaz, commands.yaw);
+			ardrone_tool_set_progressive_cmd(1, commands.phi, commands.theta, commands.gaz, commands.yaw, 0.0, 0.0);
 		}
 
 		if (commands.zap) {
